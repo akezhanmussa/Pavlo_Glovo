@@ -14,23 +14,24 @@ class BasketView:
             InlineKeyboardButton("^", callback_data="one_more",  resize_keyboard=True)
         ]
 
+        self.static_view = f'<b>{Constants.BURGER_NAME.value}</b>\n<i>{Constants.INGREDIENTS.value}</i>\nЦена: {Constants.PRICE.value} {Constants.CURRENCY.value}\n{Constants.BURGER_URL.value}'
 
     def show_basket_label(self, update, context, is_first_time = True):
         chat_id = update.message.chat.id
         message_id = update.message.message_id
         reply_markup = InlineKeyboardMarkup(self.build_basket_options(self.first_view, n_cols=1) )
         if is_first_time:
-            context.bot.send_photo(chat_id = chat_id, photo = Constants.BURGER_URL.value)
-            context.bot.send_message(chat_id = chat_id, text = "Корзина", reply_markup=reply_markup, parse_mode= ParseMode.HTML)
+            # context.bot.send_photo(chat_id = chat_id, photo = Constants.BURGER_URL.value)
+            context.bot.send_message(chat_id = chat_id, text = self.static_view, reply_markup=reply_markup, parse_mode= ParseMode.HTML)
         else:
-            context.bot.edit_message_text(chat_id = chat_id, text = "Корзина", message_id = message_id, reply_markup=reply_markup)
+            context.bot.edit_message_text(chat_id = chat_id, text = self.static_view, message_id = message_id, reply_markup=reply_markup, parse_mode= ParseMode.HTML)
 
     def show_basket_options(self, update, context): 
         chat_id = update.message.chat.id
         message_id = update.message.message_id
         n_cols = 3 if len(self.options_view) == 3 else 4
         reply_markup = InlineKeyboardMarkup(self.build_basket_options(self.options_view, n_cols=n_cols))
-        context.bot.edit_message_text(chat_id = chat_id, text = "Корзина", message_id = message_id, reply_markup=reply_markup)
+        context.bot.edit_message_text(chat_id = chat_id, text = self.static_view, message_id = message_id, reply_markup=reply_markup, parse_mode= ParseMode.HTML)
 
     def generate_options_view(self, num = 1):
         
