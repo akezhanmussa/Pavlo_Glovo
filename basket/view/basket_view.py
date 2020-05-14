@@ -1,6 +1,6 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardMarkup,KeyboardButton
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardMarkup,KeyboardButton,ParseMode
 import emoji
-
+from constants import Constants
 
 class BasketView:
 
@@ -9,18 +9,19 @@ class BasketView:
         self.first_view = [InlineKeyboardButton("Корзина", callback_data="inital_options")]
         
         self.options_view = [
-            InlineKeyboardButton("X", callback_data="switch_to_inital_state"),
-            InlineKeyboardButton("1 шт.", callback_data="no_reaction"),
-            InlineKeyboardButton("^", callback_data="one_more")
+            InlineKeyboardButton("X", callback_data="switch_to_inital_state",  resize_keyboard=True),
+            InlineKeyboardButton("1 шт.", callback_data="no_reaction",  resize_keyboard=True),
+            InlineKeyboardButton("^", callback_data="one_more",  resize_keyboard=True)
         ]
 
 
     def show_basket_label(self, update, context, is_first_time = True):
         chat_id = update.message.chat.id
         message_id = update.message.message_id
-        reply_markup = InlineKeyboardMarkup(self.build_basket_options(self.first_view, n_cols=1))
+        reply_markup = InlineKeyboardMarkup(self.build_basket_options(self.first_view, n_cols=1) )
         if is_first_time:
-            context.bot.send_message(chat_id = chat_id, text = "Корзина", reply_markup=reply_markup)
+            context.bot.send_photo(chat_id = chat_id, photo = Constants.BURGER_URL.value)
+            context.bot.send_message(chat_id = chat_id, text = "Корзина", reply_markup=reply_markup, parse_mode= ParseMode.HTML)
         else:
             context.bot.edit_message_text(chat_id = chat_id, text = "Корзина", message_id = message_id, reply_markup=reply_markup)
 
@@ -34,10 +35,10 @@ class BasketView:
     def generate_options_view(self, num = 1):
         
         self.options_view = [
-            InlineKeyboardButton("X", callback_data="switch_to_inital_state"),
-            InlineKeyboardButton("-", callback_data="one_less"),
-            InlineKeyboardButton(f"{num} шт.", callback_data="no_reaction"),
-            InlineKeyboardButton("+", callback_data="one_more")
+            InlineKeyboardButton("X", callback_data="switch_to_inital_state",  resize_keyboard=True),
+            InlineKeyboardButton("-", callback_data="one_less",  resize_keyboard=True),
+            InlineKeyboardButton(f"{num} шт.", callback_data="no_reaction",  resize_keyboard=True),
+            InlineKeyboardButton("+", callback_data="one_more",  resize_keyboard=True)
         ]
 
         if (num == 1):
