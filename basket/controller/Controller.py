@@ -1,5 +1,5 @@
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler
-from view.view import LogMenuView
+from view.log_view import LogMenuView
 
 class Controller:
  

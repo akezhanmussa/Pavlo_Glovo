@@ -1,6 +1,6 @@
 import telebot 
 from constants import Constants
-from controller.Controller import Controller
+from controller.BasketContoller import BasketController
 from telegram.ext import Updater
 
 
@@ -12,7 +12,7 @@ if __name__ == "__main__":
     receive the updates from Telegram and to deliver them to said dispatcher
     '''
     updater = Updater(token=Constants.BOT_TOKEN.value, use_context=True)
-    controller = Controller(updater.dispatcher)
+    controller = BasketController(updater.dispatcher)
     
     # Starts polling updates from Telegram.
     updater.start_polling(poll_interval=1)
