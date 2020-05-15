@@ -9,7 +9,7 @@ class View:
         keyboard.add("Меню", "Корзина")
         return keyboard
 
-    def dishes_keyboard(self, names):
+    def inline_keyboard(self, names):
         keyboard = InlineKeyboardMarkup(row_width = 2)
         length = len(names)
         ok = 0
