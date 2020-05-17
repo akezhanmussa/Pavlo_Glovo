@@ -4,13 +4,7 @@ from telebot.types import InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardBut
 
 class View:
 
-    def user_keyboard(self):
-        keyboard = ReplyKeyboardMarkup(row_width = 2)
-        keyboard.add("Меню", "Корзина")
-        return keyboard
-
-    def inline_keyboard(self, names):
-        keyboard = InlineKeyboardMarkup(row_width = 2)
+    def buttons(self, keyboard, names) :
         length = len(names)
         ok = 0
         if length % 2 != 0 :
@@ -25,5 +19,15 @@ class View:
         if ok == 1:
             button = InlineKeyboardButton(names[-1], callback_data = names[-1])
             keyboard.add(button)
+
+    def reply_keyboard(self, names):
+        keyboard = ReplyKeyboardMarkup(row_width = 2)
+        self.buttons(keyboard, names)
+
+        return keyboard
+
+    def inline_keyboard(self, names):
+        keyboard = InlineKeyboardMarkup(row_width = 2)
+        self.buttons(keyboard, names)
 
         return keyboard
