@@ -7,3 +7,4 @@ class Constants(Enum):
     INGREDIENTS = "хлеб, котлета, кетчуп, помидор"
     PRICE = 1490
     CURRENCY = "тг."
+    

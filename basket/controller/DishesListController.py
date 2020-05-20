@@ -1,7 +1,10 @@
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler
 from view.basket_view import BasketView
 
-class BasketController:
+DISH_NUM = 4
+
+
+class DishesListController:
  
     def __init__(self, dispatcher):
         self.states_dict = {
@@ -10,34 +13,42 @@ class BasketController:
         }
         self.dispatcher = dispatcher
         self.__process_handlers()
-        self.basket_view = BasketView(index = 1) 
+        self.basket_views = [BasketView(index = index) for index in range(DISH_NUM)]
         self.users = {}
 
     def basket_button_handler(self, update, context):
         # new_user = update.message.from_user["username"]
         chat_id = update.message.chat.id
         if (not chat_id in self.users):
-            self.users[chat_id] = 0
-        self.basket_view.show_basket_label(update, context, is_first_time=True)
+            self.users[chat_id] = {}
+        for index in range(DISH_NUM):
+            self.basket_views[index].show_basket_label(update, context, is_first_time=True)
         return self.states_dict["options_state"]
 
     def operations_handler(self, update, context):
         query = update.callback_query
         chat_id = query.message.chat.id
 
-        if (query.data == "switch_to_inital_state"):
-            self.basket_view.show_basket_label(query, context, is_first_time=False)
+        data = query.data
+        splitted_data = data.split('_')
+        basket_index = int(splitted_data[-1])
+
+        if not basket_index in self.users[chat_id]:
+            self.users[chat_id][basket_index] = 0
+
+        if (data == f"switch_to_inital_state_{basket_index}"):
+            self.basket_views[basket_index].show_basket_label(query, context, is_first_time=False)
             return self.states_dict["options_state"]
         
-        if (query.data == "one_more"):
-            self.users[chat_id] += 1
-        elif (query.data == "one_less"):
-            self.users[chat_id] -= 1
-        elif (query.data == "inital_options"):
-            self.users[chat_id] = 1
+        if (data == f"one_more_{basket_index}"):
+            self.users[chat_id][basket_index] += 1
+        elif (data == f"one_less_{basket_index}"):
+            self.users[chat_id][basket_index] -= 1
+        elif (data == f"inital_options_{basket_index}"):
+            self.users[chat_id][basket_index] = 1
 
-        self.basket_view.generate_options_view(self.users[chat_id])
-        self.basket_view.show_basket_options(query, context)
+        self.basket_views[basket_index].generate_options_view(self.users[chat_id][basket_index])
+        self.basket_views[basket_index].show_basket_options(query, context)
         return self.states_dict["options_state"]
 
 
