@@ -1,6 +1,7 @@
 import telebot 
 from constants import Constants
 from controller.DishesListController import DishesListController
+from controller.BasketContoller import BasketController
 from telegram.ext import Updater
 
 
@@ -12,8 +13,8 @@ if __name__ == "__main__":
     receive the updates from Telegram and to deliver them to said dispatcher
     '''
     updater = Updater(token=Constants.BOT_TOKEN.value, use_context=True)
-    controller = DishesListController(updater.dispatcher)
-    
+    dish_controller = DishesListController(updater.dispatcher)
+
     # Starts polling updates from Telegram.
     updater.start_polling(poll_interval=1)
     # Blocks until one of the signals are received and stops the updater.

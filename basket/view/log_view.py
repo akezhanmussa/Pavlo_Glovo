@@ -1,4 +1,3 @@
-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardMarkup,KeyboardButton
 
 
@@ -12,13 +11,13 @@ class LogMenuView:
     def __init__(self):
         
         self.button_list = [
-            InlineKeyboardButton("Начать Опрос", callback_data="switch_to_registration"),
+            InlineKeyboardButton("Начало", callback_data="switch_to_registration"),
             InlineKeyboardButton("Назад", callback_data="back_to_main_menu")
         ]
 
     def show_keyboard_menu(self, update, context):
         chat_id = update.message.chat.id
-        #telegram.KeyboardButton
+        print(chat_id)
         custom_keyboard = [[KeyboardButton('Регистрация'), KeyboardButton('Войти')], 
                    [            KeyboardButton('Инфо')]]
         reply_markup = ReplyKeyboardMarkup(custom_keyboard, resize_keyboard=True,one_time_keyboard=True)

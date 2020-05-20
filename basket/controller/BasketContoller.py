@@ -38,11 +38,12 @@ class BasketController:
 
         self.basket_view.generate_options_view(self.users[chat_id])
         self.basket_view.show_basket_options(query, context)
+        
         return self.states_dict["options_state"]
 
 
     def __process_handlers(self):
-        conversation_handler = ConversationHandler(entry_points=[CommandHandler("basket",self.basket_button_handler)],
+        conversation_handler = ConversationHandler(entry_points=[CommandHandler("basket_2",self.basket_button_handler)],
                                                    states={
                                                        self.states_dict["options_state"]: [
                                                            CallbackQueryHandler(self.operations_handler)],
