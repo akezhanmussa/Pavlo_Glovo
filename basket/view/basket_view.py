@@ -4,17 +4,20 @@ from constants import Constants
 
 class BasketView:
 
-    def __init__(self):
+    def __init__(self, index, price = 1000, currency = " тг"):
 
-        self.first_view = [InlineKeyboardButton("Корзина", callback_data="inital_options")]
-        
+        self.index          = index
+        self.price          = price
+        self.currency       = currency
+
+        self.first_view     = [InlineKeyboardButton("Корзина", callback_data=f"inital_options_{self.index}")]
+        self.static_view    = f'<b>{Constants.BURGER_NAME.value}</b>\n<i>{Constants.INGREDIENTS.value}</i>\nЦена: {Constants.PRICE.value} {Constants.CURRENCY.value}\n{Constants.BURGER_URL.value}'
+
         self.options_view = [
-            InlineKeyboardButton("X", callback_data="switch_to_inital_state",  resize_keyboard=True),
-            InlineKeyboardButton("1 шт.", callback_data="no_reaction",  resize_keyboard=True),
-            InlineKeyboardButton("^", callback_data="one_more",  resize_keyboard=True)
+            InlineKeyboardButton("X", callback_data=f"switch_to_inital_state_{self.index}",  resize_keyboard=True),
+            InlineKeyboardButton("1 шт.", callback_data=f"no_reaction_{self.index}",  resize_keyboard=True),
+            InlineKeyboardButton("^", callback_data=f"one_more_{self.index}",  resize_keyboard=True)
         ]
-
-        self.static_view = f'<b>{Constants.BURGER_NAME.value}</b>\n<i>{Constants.INGREDIENTS.value}</i>\nЦена: {Constants.PRICE.value} {Constants.CURRENCY.value}\n{Constants.BURGER_URL.value}'
 
     def show_basket_label(self, update, context, is_first_time = True):
         chat_id = update.message.chat.id
@@ -36,10 +39,10 @@ class BasketView:
     def generate_options_view(self, num = 1):
         
         self.options_view = [
-            InlineKeyboardButton("X", callback_data="switch_to_inital_state",  resize_keyboard=True),
-            InlineKeyboardButton("-", callback_data="one_less",  resize_keyboard=True),
-            InlineKeyboardButton(f"{num} шт.", callback_data="no_reaction",  resize_keyboard=True),
-            InlineKeyboardButton("+", callback_data="one_more",  resize_keyboard=True)
+            InlineKeyboardButton("X", callback_data=f"switch_to_inital_state_{self.index}",  resize_keyboard=True),
+            InlineKeyboardButton("-", callback_data=f"one_less_{self.index}",  resize_keyboard=True),
+            InlineKeyboardButton(f"{num} шт.", callback_data=f"no_reaction_{self.index}",  resize_keyboard=True),
+            InlineKeyboardButton("+", callback_data=f"one_more_{self.index}",  resize_keyboard=True)
         ]
 
         if (num == 1):
