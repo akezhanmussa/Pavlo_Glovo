@@ -11,7 +11,7 @@ class BasketView:
         self.currency       = currency
 
         self.first_view     = [InlineKeyboardButton("Корзина", callback_data=f"inital_options_{self.index}")]
-        self.static_view    = f'<b>{Constants.BURGER_NAME.value}</b>\n<i>{Constants.INGREDIENTS.value}</i>\nЦена: {Constants.PRICE.value} {Constants.CURRENCY.value}\n{Constants.BURGER_URL.value}'
+        self.static_view    = f'<b>{Constants.BURGER_NAME}</b>\n<i>{Constants.INGREDIENTS}</i>\nЦена: {Constants.PRICE} {Constants.CURRENCY}\n{Constants.BURGER_URL}'
 
         self.options_view = [
             InlineKeyboardButton("X", callback_data=f"switch_to_inital_state_{self.index}",  resize_keyboard=True),
@@ -29,7 +29,7 @@ class BasketView:
         else:
             context.bot.edit_message_text(chat_id = chat_id, text = self.static_view, message_id = message_id, reply_markup=reply_markup, parse_mode= ParseMode.HTML)
 
-    def show_basket_options(self, update, context): 
+    def show_basket_options(self, update, context):
         chat_id = update.message.chat.id
         message_id = update.message.message_id
         n_cols = 3 if len(self.options_view) == 3 else 4
@@ -37,7 +37,7 @@ class BasketView:
         context.bot.edit_message_text(chat_id = chat_id, text = self.static_view, message_id = message_id, reply_markup=reply_markup, parse_mode= ParseMode.HTML)
 
     def generate_options_view(self, num = 1):
-        
+
         self.options_view = [
             InlineKeyboardButton("X", callback_data=f"switch_to_inital_state_{self.index}",  resize_keyboard=True),
             InlineKeyboardButton("-", callback_data=f"one_less_{self.index}",  resize_keyboard=True),
@@ -47,7 +47,7 @@ class BasketView:
 
         if (num == 1):
             del self.options_view[1]
-        
+
 
     def build_basket_options(self, buttons, n_cols = 1, header_buttons=None, footer_buttons=None):
         menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
