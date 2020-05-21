@@ -1,38 +1,47 @@
-import telebot
+from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler
 from view.main_menu_view import View
 from constants import Constants
 
+
 class MenuController :
 
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, dispatcher):
+
+        self.states_dict = {
+            "Меню": 1
+        }
+
+        self.dispatcher = dispatcher
         self.view = View()
         self.data = Constants()
         self.dishes = Constants.DISHES_TYPES
-        @self.bot.message_handler(commands = ["start"])
-        def _process_start_message(message):
-            self.process_start_message(message)
-
-        @self.bot.message_handler(content_types = ["text"])
-        def _process_user_message(message):
-            self.process_user_message(message)
-
-        @self.bot.callback_query_handler(func = lambda call: True)
-        def _process_callback(call):
-            self.process_callback(call)
+        mm = MessageHandler(Filters.text | Filters.command, self.process_handler)
+        handler = ConversationHandler([CommandHandler("start", self.process_handler)], states = {
+            self.states_dict["Меню"]: [CallbackQueryHandler(self.xxx)]
+        }, fallbacks = [])
+        self.dispatcher.add_handler(handler)
+        self.dispatcher.add_handler(mm)
 
 
-    def process_start_message(self, message):
+    def xxx(self, bot, update):
+        query = bot.callback_query
+        message = query.data
+        chat_id = query.message.chat.id
+        update.bot.send_message(chat_id, message)
+
+    def process_handler(self, bot, update):
+        message = bot.message.text
+        if message == "/start":
+            self.process_start_message(bot, update)
+        if message == "Меню":
+            self.process_menu_message(bot, update)
+        return self.states_dict["Меню"]
+
+    def process_start_message(self, bot, update):
+        chat_id = bot.message.chat.id
         menu = self.data.MAIN_MENU
         kb = self.view.reply_keyboard(menu)
-        self.bot.send_message(message.chat.id, "Добро Пожаловать!", reply_markup = kb)
-
-    def process_user_message(self, message):
-        if message.text == "Меню":
-            self.menu_button(message)
-
-        if message.text == "Начало Нолана":
-            self.process_start_message(message)
+        update.bot.send_message(chat_id, "Добро Пожаловать!", reply_markup = kb)
 
     def process_callback(self, call):
         if call.data in self.dishes and self.dishes[call.data] != None:
@@ -42,11 +51,15 @@ class MenuController :
             self.bot.send_message(call.message.chat.id, 'Ake pidor')
 
 
-    def menu_button(self, message):
+    def process_menu_message(self, bot, update):
+        #/// reply_buttons for user after menu pressed
+        chat_id = bot.message.chat.id
         kb = self.view.reply_keyboard(self.data.REPLY_BUTTONS)
-        self.bot.send_message(message.chat.id, message.text, reply_markup = kb)
+        update.bot.send_message(chat_id, bot.message.text, reply_markup = kb)
+
+        #///
         names = []
         for dish in self.dishes:
             names.append(dish)
         kb = self.view.inline_keyboard(names)
-        self.bot.send_message(message.chat.id, 'Выберите раздел, чтобы вывести список блюд:', reply_markup = kb)
+        update.bot.send_message(chat_id, 'Выберите раздел, чтобы вывести список блюд:', reply_markup = kb)

@@ -1,33 +1,33 @@
-import telebot
-from telebot.types import InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton
-
+from telegram import InlineKeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton
 
 class View:
 
-    def buttons(self, keyboard, names) :
-        length = len(names)
-        ok = 0
-        if length % 2 != 0 :
-            ok = 1
-            length -= 1
+    def build_menu(self, buttons, n_cols, header_buttons=None, footer_buttons=None):
+        menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+        if header_buttons:
+            menu.insert(0, [header_buttons])
+        if footer_buttons:
+            menu.append([footer_buttons])
+        return menu
 
-        for i in range(0, length, 2):
-            button1 = InlineKeyboardButton(names[i], callback_data = names[i])
-            button2 = InlineKeyboardButton(names[i + 1], callback_data = names[i + 1])
-            keyboard.add(button1, button2)
+    def get_buttons(self, names) :
+        buttons = []
+        for name in names:
+            button = InlineKeyboardButton(name, callback_data = name)
+            buttons.append(button)
 
-        if ok == 1:
-            button = InlineKeyboardButton(names[-1], callback_data = names[-1])
-            keyboard.add(button)
+        return buttons
 
     def reply_keyboard(self, names):
-        keyboard = ReplyKeyboardMarkup(row_width = 2)
-        self.buttons(keyboard, names)
+        button_list = self.get_buttons(names)
+        bt = self.build_menu(button_list, n_cols = 2)
+        keyboard = ReplyKeyboardMarkup(bt)
 
         return keyboard
 
     def inline_keyboard(self, names):
-        keyboard = InlineKeyboardMarkup(row_width = 2)
-        self.buttons(keyboard, names)
+        button_list = self.get_buttons(names)
+        bt = self.build_menu(button_list, n_cols = 2)
+        keyboard = InlineKeyboardMarkup(bt)
 
         return keyboard
