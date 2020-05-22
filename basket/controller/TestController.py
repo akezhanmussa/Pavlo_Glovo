@@ -4,15 +4,14 @@ from basket.view.basket_menu_view import BasketMenuView
 
 DISH_NUM = 4
 
-class DishesListController:
+class TestController():
  
-    def __init__(self, dispatcher):
+    def __init__(self):
         self.states_dict = {
             "basket_label_state": 1,
             "options_state": 2
         }
-        self.dispatcher     = dispatcher
-        self.__process_handlers()
+
         self.basket_views   = [BasketView(index = index) for index in range(DISH_NUM)]
         self.log_menu_view  = BasketMenuView(title = "Список блюд")
         self.users          = {}
@@ -20,8 +19,13 @@ class DishesListController:
     def basket_button_handler(self, update, context):
         # new_user = update.message.from_user["username"]
         chat_id = update.message.chat.id
+        print(chat_id)
+        print("BELOW IS MY log_menu view")
+        print(self.log_menu_view)
         self.log_menu_view.show_keyboard_menu(update, context, text = "Корзина")
         
+        print("I have shown keyboard")
+
         if (not chat_id in self.users):
             self.users[chat_id] = {}
 
@@ -31,6 +35,7 @@ class DishesListController:
         for index in range(DISH_NUM):
             self.basket_views[index].show_basket_label(update, context, is_first_time=True)
 
+        print("URRAA I have shown initial labels")
         return self.states_dict["options_state"]
 
     def operations_handler(self, update, context):
@@ -75,16 +80,4 @@ class DishesListController:
             total_price += view.price * self.users[chat_id][basket_index]
         return f"{total_price} {currency}"
 
-    def __process_handlers(self):
-        conversation_handler = ConversationHandler(entry_points=[CommandHandler("basket",self.basket_button_handler)],
-                                                   states={
-                                                       self.states_dict["options_state"]: [
-                                                           CallbackQueryHandler(self.operations_handler),
-                                                           MessageHandler(Filters.text, self.bask_evaluate_handler)],
-                                                       self.states_dict["basket_label_state"]: [
-                                                           CallbackQueryHandler(self.basket_button_handler)]
-                                                   }, fallbacks=[], allow_reentry=True)
-        
-        #  Dispatcher that handles the updates and dispatches them to the handlers.
-        self.dispatcher.add_handler(conversation_handler)
 

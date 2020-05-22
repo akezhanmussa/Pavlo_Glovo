@@ -18,8 +18,10 @@ class BasketMenuView():
         context.bot.send_message(chat_id=chat_id, text=f"<b>{price_details}</b>", parse_mode= ParseMode.HTML)
 
     def show_keyboard_menu(self, update, context, text = ""):
+        print("Before getting chat_id")
         chat_id = update.message.chat.id
-
+        print("Inside keyboard")
+        print(f"{chat_id} is my chat_id")
         reply_markup = ReplyKeyboardMarkup(self.custom_keyboard, resize_keyboard=True,one_time_keyboard=True)
         context.bot.send_message(chat_id=chat_id, 
                         text=text, 

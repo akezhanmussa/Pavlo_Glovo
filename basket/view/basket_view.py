@@ -1,6 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardMarkup,KeyboardButton,ParseMode
 import emoji
-from constants import Constants
+from basket.constants import Constants
 
 class BasketView:
 
