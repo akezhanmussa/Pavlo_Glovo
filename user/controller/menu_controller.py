@@ -1,26 +1,32 @@
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler
 from user.view.main_menu_view import View
 from user.constants import Constants
+from user.controller.checkout_controller import CheckoutController
 
 class MenuController :
 
-    def __init__(self):
+    def __init__(self, checkoutCont):
         self.states_dict = {
-            "menu": 1
+            "menu": 1,
+            "checkout": 2
         }
         self.view = View()
         self.data = Constants()
         self.dishes = Constants.DISHES_TYPES
+        self.checkoutCont = checkoutCont
 
     def process_message_handler(self, bot, update):
         message = bot.message.text
+        rt = ""
         if message == "Меню":
-            self.process_menu_message(bot, update)
+            rt = self.process_menu_message(bot, update)
         if message == "Начало":
-            self.process_start(bot, update)
-        return self.states_dict["menu"]
+            rt = self.process_start(bot, update)
+        if message == "Корзина":
+            rt = self.checkoutCont.process_checkout(bot, update)
+        return rt
 
-    def callback_handlers(self, bot, update):
+    def callback_handler(self, bot, update):
         query = bot.callback_query
         chat_id = query.message.chat.id
         if query.data in self.dishes and self.dishes[query.data] != None:
