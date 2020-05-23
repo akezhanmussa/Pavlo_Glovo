@@ -1,6 +1,4 @@
 from basket.constants import Constants
-from basket.controller.DishesListController import DishesListController
-from basket.controller.BasketContoller import BasketController
 from MainController import MainController
 from telegram.ext import Updater
 

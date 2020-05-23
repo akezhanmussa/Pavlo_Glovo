@@ -1,5 +1,5 @@
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler
-from basket.view.basket_view import BasketView
+from basket.view.BasketView import BasketView
 
 class BasketController:
  

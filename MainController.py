@@ -1,7 +1,5 @@
 from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler
-from basket.view.basket_view import BasketView
-from basket.view.basket_menu_view import BasketMenuView
-from basket.controller.TestController import TestController
+from basket.controller.DishListController import DishListController
 
 DISH_NUM = 4
 
@@ -13,12 +11,10 @@ class MainController():
             "options_state": 2
             }
         self.dispatcher     = dispatcher
-        self.test_controller = TestController()
+        self.test_controller = DishListController()
         self.__process_handlers()
 
     def basket_command_handler(self, update, context):
-        print(update.message.chat.id)
-        print("Before calling handler")
         return self.test_controller.basket_button_handler(update, context)
     
     def __process_handlers(self):
