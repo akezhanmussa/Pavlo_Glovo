@@ -6,12 +6,12 @@ DISH_NUM = 4
 class MainController():
  
     def __init__(self, dispatcher):
-        self.states_dict = {
+        self.states_dict        = {
             "basket_label_state": 1,
             "options_state": 2
             }
-        self.dispatcher     = dispatcher
-        self.test_controller = DishListController()
+        self.dispatcher         = dispatcher
+        self.test_controller    = DishListController()
         self.__process_handlers()
 
     def basket_command_handler(self, update, context):

@@ -53,11 +53,19 @@ class DishListController():
             detail = 'chosen/'
 
         if (data == f"{detail}switch_to_inital_state_{basket_index}"):
+            
             self.users[chat_id][basket_index] = 0
+
             if not was_clicked_by_choosen:
                 self.basket_views[basket_index].show_basket_label(query, context, is_first_time=False)
             else: 
-                self.log_menu_view.send_warning_message(update = query, context = context)
+                if self.choosen_dish_view.delete_dish(index = basket_index):
+                    self.choosen_dish_view.setup_dishes_view()
+                    self.choosen_dish_view.generate_dish_choosen_view()
+                    self.choosen_dish_view.show_dish_choosen_view(query, context, is_first_time=False)
+                else:
+                    self.log_menu_view.send_warning_message(update = query, context = context)
+
             return self.states_dict["options_state"]
         
         if (data == f"{detail}one_more_{basket_index}"):
@@ -74,8 +82,8 @@ class DishListController():
             self.basket_views[basket_index].generate_options_view(self.users[chat_id][basket_index])
             self.basket_views[basket_index].show_basket_options(query, context, is_first_time=False)
         else:
-            self.choosen_dish_view.generate_dish_choosen_view()
-            self.choosen_dish_view.show_dish_choosen_view(update, context, is_first_time=False)
+            self.choosen_dish_view.generate_dish_choosen_view(applied_index=basket_index, new_value = self.users[chat_id][basket_index])
+            self.choosen_dish_view.show_dish_choosen_view(query, context, is_first_time=False)
 
         return self.states_dict["options_state"]
 
@@ -97,13 +105,11 @@ class DishListController():
 
     def bask_evaluate_handler(self, update, context):
         chat_id = update.message.chat.id
-        
         if update.message["text"] == "Корзина":
 
             if not self.are_dishes_existing_in_chat_id(chat_id): 
                 self.log_menu_view.send_warning_message(update = update, context = context)
             else:
-                print("Inside choosen views")
                 self.choosen_dish_view  = DishChoosenView(dishes = self.users[chat_id])
                 self.choosen_dish_view.generate_dish_choosen_view()
                 self.choosen_dish_view.show_dish_choosen_view(update, context)

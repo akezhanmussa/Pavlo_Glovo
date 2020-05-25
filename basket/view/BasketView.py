@@ -47,7 +47,8 @@ class BasketView:
         chat_id = update.message.chat.id
         message_id = update.message.message_id
         n_cols = 3 if len(self.options_view) == 3 else 4
-        n_cols += optional_num_buttons
+
+
         reply_markup = InlineKeyboardMarkup(self.build_basket_options(self.options_view, n_cols=n_cols))
         
         if is_first_time:
@@ -67,7 +68,13 @@ class BasketView:
                 parse_mode= ParseMode.HTML
                 )
 
-    def generate_options_view(self, num = 1):
+    def generate_options_view(self, num = 1, debug_print = False):
+
+        if debug_print: 
+            print("inside of generate options view")
+            print(num)
+            print("*"*30)
+        
         self.options_view = [
             InlineKeyboardButton("X", callback_data=f"{self.optional_detail}switch_to_inital_state_{self.index}",  resize_keyboard=True),
             InlineKeyboardButton("-", callback_data=f"{self.optional_detail}one_less_{self.index}",  resize_keyboard=True),

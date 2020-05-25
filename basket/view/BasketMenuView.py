@@ -2,11 +2,6 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardMar
 
 
 class BasketMenuView(): 
-    """
-    TestView class:
-        the main responsibility of this class is 'sending messages of each state in bot'
-        and also 'formatting of messages', etc.
-    """
     
     def __init__(self, title):
         self.title = title
