@@ -47,7 +47,7 @@ class DishListController():
         basket_index            = int(splitted_data[-1])
         was_clicked_by_choosen  = False
         detail                  = ""
-
+        
         if (attribute_for_chosen[0] == 'chosen'):
             was_clicked_by_choosen = True
             detail = 'chosen/'
@@ -56,9 +56,11 @@ class DishListController():
             
             self.users[chat_id][basket_index] = 0
 
+            # was clicked by not the busket button in keyboard menu
             if not was_clicked_by_choosen:
                 self.basket_views[basket_index].show_basket_label(query, context, is_first_time=False)
             else: 
+                # deleting the choosen dish 
                 if self.choosen_dish_view.delete_dish(index = basket_index):
                     self.choosen_dish_view.setup_dishes_view()
                     self.choosen_dish_view.generate_dish_choosen_view()
