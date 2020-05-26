@@ -18,6 +18,10 @@ class View:
 
         return buttons
 
+    def contact_keyboard(self):
+        keyboard = ReplyKeyboardMarkup([[KeyboardButton('Отправить контактный номер', request_contact=True)]])
+        return keyboard
+
     def reply_keyboard(self, names):
         button_list = self.get_buttons(names)
         bt = self.build_menu(button_list, n_cols = 2)

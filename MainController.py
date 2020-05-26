@@ -23,7 +23,7 @@ class MainController():
             ],
             self.states_dict["checkout"]: [
             CallbackQueryHandler(self.checkoutCont.process_callback_handler),
-            MessageHandler(Filters.text, self.checkoutCont.process_checkout)
+            MessageHandler(Filters.text | Filters.contact, self.checkoutCont.process_checkout)
             ]
         }, fallbacks = [])
         self.dispatcher.add_handler(handler)
