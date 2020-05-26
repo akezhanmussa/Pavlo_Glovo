@@ -52,10 +52,12 @@ class DishListController():
             was_clicked_by_choosen = True
             detail = 'chosen/'
 
-        if (data == f"{detail}switch_to_inital_state_{basket_index}"):
-            
-            self.users[chat_id][basket_index] = 0
+        print(data)
+        print("Stage 1")
 
+        if (data == f"{detail}switch_to_inital_state_{basket_index}"):
+            self.users[chat_id][basket_index] = 0
+            print("WoW")
             # was clicked by not the busket button in keyboard menu
             if not was_clicked_by_choosen:
                 self.basket_views[basket_index].show_basket_label(query, context, is_first_time=False)
@@ -70,6 +72,10 @@ class DishListController():
 
             return self.states_dict["options_state"]
         
+        print(data)
+        print(f"detail - {detail}")
+        print(f"basket_index - {basket_index}")
+        
         if (data == f"{detail}one_more_{basket_index}"):
             self.users[chat_id][basket_index] += 1
         elif (data == f"{detail}one_less_{basket_index}"):
@@ -77,11 +83,18 @@ class DishListController():
         elif (data == f"{detail}inital_options_{basket_index}"):
             self.users[chat_id][basket_index] = 1
         
+        print("Stage 2")
+
         if self.choosen_dish_view is not None:
             self.choosen_dish_view.count_number_of_selected_dishes(dishes = self.users[chat_id])
         
+        print(f"{was_clicked_by_choosen} - was_clicked_by_choosen")
+        print("Stage 3")
+
         if not was_clicked_by_choosen:
+            print("before generation")
             self.basket_views[basket_index].generate_options_view(self.users[chat_id][basket_index])
+            print("before showing")
             self.basket_views[basket_index].show_basket_options(query, context, is_first_time=False)
         else:
             self.choosen_dish_view.generate_dish_choosen_view(applied_index=basket_index, new_value = self.users[chat_id][basket_index])
