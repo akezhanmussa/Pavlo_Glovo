@@ -1,4 +1,4 @@
-from basket.constants import Constants
+from user.constants import Constants
 from MainController import MainController
 from telegram.ext import Updater
 
@@ -9,7 +9,7 @@ if __name__ == "__main__":
     so they can focus on coding the bot. Its purpose is to
     receive the updates from Telegram and to deliver them to said dispatcher
     '''
-    updater = Updater(token=Constants.BOT_TOKEN.value, use_context=True)
+    updater = Updater(token=Constants.BOT_TOKEN, use_context=True)
     mainController = MainController(updater.dispatcher)
 
     # Starts polling updates from Telegram.

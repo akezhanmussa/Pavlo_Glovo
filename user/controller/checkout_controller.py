@@ -7,7 +7,7 @@ class CheckoutController :
 
     def __init__(self):
         self.states_dict = {
-            "checkout": 2
+            "checkout": 6
         }
         self.userData = {
             "name": None,
@@ -91,12 +91,8 @@ class CheckoutController :
         kb = self.view.contact_keyboard()
         update.bot.send_message(chat_id, "Укажите свой контактный номер:", reply_markup = kb)
 
-    def ask_cutlery(self, bot, update):
-        self.ask["cutlery"] = True
-        print(bot)
-
     def finish_asking(self, bot, update):
-        self.ask["phone"] = True
+        print("here")
         phone = bot.message.contact.phone_number
         chat_id = bot.message.chat.id
         self.userData["phone"] = phone
@@ -124,10 +120,7 @@ class CheckoutController :
         elif self.ask["time"] == False:
             self.ask_exact_time(bot, update)
         elif self.ask["phone"] == False:
-            print("inside phone")
             self.ask_phone_number(bot, update)
-        # elif self.ask["cutflery"] == False:
-        #     self.ask_cutlery(bot, update)
         else:
             self.finish_asking(bot, update)
         return self.states_dict["checkout"]

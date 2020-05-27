@@ -24,7 +24,7 @@ class MenuController :
             rt = self.process_menu_message(bot, update)
         if message == "Начало":
             rt = self.process_start(bot, update)
-        if message == "Корзина":
+        if message == "Оформить Заказ":
             rt = self.checkoutCont.process_checkout(bot, update)
         return rt
 
